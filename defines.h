@@ -1,9 +1,9 @@
 #pragma once
 
-// Идентификаторы
+// РРґРµРЅС‚РёС„РёРєР°С‚РѕСЂС‹
 #define IDENT                10
 
-// Ключевые слова
+// РљР»СЋС‡РµРІС‹Рµ СЃР»РѕРІР°
 #define KW_INT               1
 #define KW_SHORT             2
 #define KW_LONG              3
@@ -13,11 +13,11 @@
 #define KW_LONGLONG          7
 #define KW_MAIN              8
 
-// Константы
-#define CONST_DEC            20   // Константа (10 с/с)
-#define CONST_HEX            21   // Константа (16 с/с)
+// РљРѕРЅСЃС‚Р°РЅС‚С‹
+#define CONST_DEC            20   // РљРѕРЅСЃС‚Р°РЅС‚Р° (10 СЃ/СЃ)
+#define CONST_HEX            21   // РљРѕРЅСЃС‚Р°РЅС‚Р° (16 СЃ/СЃ)
 
-// Специальные знаки / разделители
+// РЎРїРµС†РёР°Р»СЊРЅС‹Рµ Р·РЅР°РєРё / СЂР°Р·РґРµР»РёС‚РµР»Рё
 #define SEMI                 30   // ;
 #define COMMA                31   // ,
 #define LPAREN               32   // (
@@ -27,7 +27,7 @@
 #define LBRACKET             36   // [
 #define RBRACKET             37   // ]
 
-// Операторы
+// РћРїРµСЂР°С‚РѕСЂС‹
 #define EQ                   40   // ==
 #define NEQ                  41   // !=
 #define LE                   42   // <=
@@ -42,6 +42,6 @@
 #define DIV                  50   // /
 #define MOD                  51   // %
 
-// Прочие
-#define T_END                100  // Конец исходного модуля (EOF)
-#define T_ERR                200  // Ошибочный символ
+// РџСЂРѕС‡РёРµ
+#define T_END                100  // РљРѕРЅРµС† РёСЃС…РѕРґРЅРѕРіРѕ РјРѕРґСѓР»СЏ (EOF)
+#define T_ERR                200  // РћС€РёР±РѕС‡РЅС‹Р№ СЃРёРјРІРѕР»

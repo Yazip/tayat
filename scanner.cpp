@@ -4,7 +4,7 @@
 #include <sstream>
 #include <iostream>
 
-#define MAX_CONST_LEN 20 // Максимальная длина числовой константы и идентификатора
+#define MAX_CONST_LEN 20 // РњР°РєСЃРёРјР°Р»СЊРЅР°СЏ РґР»РёРЅР° С‡РёСЃР»РѕРІРѕР№ РєРѕРЅСЃС‚Р°РЅС‚С‹ Рё РёРґРµРЅС‚РёС„РёРєР°С‚РѕСЂР°
 
 Scanner::Scanner() : text(), current_pos(0) {}
 
@@ -83,9 +83,9 @@ int Scanner::getNextLex(std::string& out_lex) {
     char c = peek();
     if (c == '\0') return T_END;
 
-    int token = T_ERR; // По умолчанию ошибочный символ
+    int token = T_ERR; // РџРѕ СѓРјРѕР»С‡Р°РЅРёСЋ РѕС€РёР±РѕС‡РЅС‹Р№ СЃРёРјРІРѕР»
 
-    // Идентификаторы / Ключевые слова
+    // РРґРµРЅС‚РёС„РёРєР°С‚РѕСЂС‹ / РљР»СЋС‡РµРІС‹Рµ СЃР»РѕРІР°
     if (isIdentStart(c)) {
         std::string lex;
         lex.push_back(getChar());
@@ -100,18 +100,18 @@ int Scanner::getNextLex(std::string& out_lex) {
         }
     }
 
-    // Константы
+    // РљРѕРЅСЃС‚Р°РЅС‚С‹
     else if (isDigit(c)) {
         char first = getChar();
         if (first == '0') {
             char next = peek();
             if ((next == 'x') || (next == 'X')) {
-                // Требуется >=1 16-ричных цифр
+                // РўСЂРµР±СѓРµС‚СЃСЏ >=1 16-СЂРёС‡РЅС‹С… С†РёС„СЂ
                 getChar();
                 std::string lex = "0";
                 lex.push_back(next);
                 if (!isHexDigit(peek())) {
-                    // Ошибка: 0x без цифр
+                    // РћС€РёР±РєР°: 0x Р±РµР· С†РёС„СЂ
                     out_lex = lex;
                     token = T_ERR;
                 }
@@ -130,7 +130,7 @@ int Scanner::getNextLex(std::string& out_lex) {
                 }
             }
             else if (isDigit(next)) {
-                // Цифра после 0 - читаем как десятичную константу
+                // Р¦РёС„СЂР° РїРѕСЃР»Рµ 0 - С‡РёС‚Р°РµРј РєР°Рє РґРµСЃСЏС‚РёС‡РЅСѓСЋ РєРѕРЅСЃС‚Р°РЅС‚Сѓ
                 std::string lex = "0";
                 while (isDigit(peek())) {
                     lex.push_back(getChar());
@@ -166,7 +166,7 @@ int Scanner::getNextLex(std::string& out_lex) {
         }
     }
 
-    // Операторы / специальные знаки / разделители
+    // РћРїРµСЂР°С‚РѕСЂС‹ / СЃРїРµС†РёР°Р»СЊРЅС‹Рµ Р·РЅР°РєРё / СЂР°Р·РґРµР»РёС‚РµР»Рё
     else {
         switch (c) {
         case '+':
@@ -302,15 +302,15 @@ int Scanner::getNextLex(std::string& out_lex) {
         }
     }
 
-    // Вывод информации в консоль
+    // Р’С‹РІРѕРґ РёРЅС„РѕСЂРјР°С†РёРё РІ РєРѕРЅСЃРѕР»СЊ
     if (token != T_END) {
-        std::cout << "Код: " << token << ", Лексема: '" << out_lex << "'" << std::endl;
+        std::cout << "РљРѕРґ: " << token << ", Р›РµРєСЃРµРјР°: '" << out_lex << "'" << std::endl;
     }
 
     return token;
 }
 
-// Подсчёт строки и столбца
+// РџРѕРґСЃС‡С‘С‚ СЃС‚СЂРѕРєРё Рё СЃС‚РѕР»Р±С†Р°
 std::pair<int, int> Scanner::getLineCol() const {
     int line = 1, col = 0;
     for (size_t i = 0; (i < current_pos) && (i < text.size()); i++) {
