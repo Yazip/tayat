@@ -1,10 +1,17 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ClassDiagram MajorVersion="1" MinorVersion="1" MembersFormat="FullSignature">
   <Class Name="Scanner">
-    <Position X="5.75" Y="1.25" Width="2.75" />
+    <Position X="1.75" Y="1.25" Width="4.25" />
     <TypeIdentifier>
       <HashCode>AAAUAgQABAAQIACIAACAAAAAAAAAIIAIQgAAAAAAAQA=</HashCode>
       <FileName>scanner.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Diagram">
+    <Position X="7.75" Y="0.5" Width="5" />
+    <TypeIdentifier>
+      <HashCode>ABMkASAIAIAIBkAAEQEAAAIAAgQAIAAECAoIAAACAAQ=</HashCode>
+      <FileName>diagram.h</FileName>
     </TypeIdentifier>
   </Class>
   <Font Name="Segoe UI" Size="9" />

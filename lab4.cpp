@@ -1,10 +1,10 @@
-#include "defines.h"
-#include "scanner.h"
+#include "diagram.h"
 
 #include <iostream>
 #include <Windows.h>
 
 int main(int argc, char** argv) {
+
     SetConsoleCP(1251);
     SetConsoleOutputCP(1251);
 
@@ -17,17 +17,8 @@ int main(int argc, char** argv) {
         return 2;
     }
 
-    while (true) {
-        std::string lex;
-        int code = sc.getNextLex(lex);
-        if (code == T_END) {
-            std::cout << "T_END=" << code << "\n";
-            break;
-        }
-        if (code == T_ERR) {
-            std::cerr << "Лексическая ошибка: \"" << lex << "\"\n";
-            break;
-        }
-    }
+    Diagram dg(&sc);
+    dg.ParseProgram();
+
     return 0;
 }

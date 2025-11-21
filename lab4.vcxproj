@@ -123,11 +123,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="diagram.cpp" />
     <ClCompile Include="lab4.cpp" />
     <ClCompile Include="scanner.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="defines.h" />
+    <ClInclude Include="diagram.h" />
     <ClInclude Include="scanner.h" />
   </ItemGroup>
   <ItemGroup>
