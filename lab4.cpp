@@ -1,7 +1,9 @@
-#include "diagram.h"
-
 #include <iostream>
+#include <string>
 #include <Windows.h>
+
+#include "diagram.h"
+#include "tree.h"
 
 int main(int argc, char** argv) {
 
@@ -19,6 +21,14 @@ int main(int argc, char** argv) {
 
     Diagram dg(&sc);
     dg.ParseProgram();
+
+    std::cout << "Ошибок не обнаружено!" << std::endl;
+    if (Tree::Root) {
+        Tree::Root->Print();
+    }
+    else {
+        std::cout << "<дерево семантики пусто>" << std::endl;
+    }
 
     return 0;
 }

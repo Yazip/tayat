@@ -2,6 +2,7 @@
 
 #include "scanner.h"
 #include "defines.h"
+#include "data_type.h"
 #include <string>
 #include <vector>
 
@@ -17,10 +18,17 @@ private:
     int cur_tok;
     std::string cur_lex;
 
+    DATA_TYPE current_decl_type; // Текущий тип при объявлении переменных, массивов и именованных констант
+    int current_arr_elem_count; // Текущая размерность массива (для определения: массив или нет)
+
     int nextToken();
     int peekToken();
     void pushBack(int tok, const std::string& lex);
-    void error(std::string msg);
+
+    // Базовые лексические/синтаксические/семантические ошибки
+    void lexError();
+    void synError(const std::string& msg);
+    void semError(const std::string& msg);
 
     void Program(); // Верхнеуровневая программа (TopDecl*)
     void TopDecl(); // Одно верхнеуровневое объявление (MainFunc | TypeDefinition | VarDecl | ConstDecl)
@@ -34,11 +42,11 @@ private:
     void BlockItems(); // Содержимое блока: (ConstDecl | VarDecl | Stmt)*
     void Stmt(); // Оператор: ';' | Block | Assign | While
     void WhileStmt(); // while (Expr) Stmt
-    void Expr(); // Выражение (уровень равенств; поддержка унарного +/-)
-    void Rel(); // Уровень отношений (<, <=, >, >=)
-    void Add(); // Аддитивные (+, -)
-    void Mul(); // Мультипликативные (*, /, %)
-    void Prim(); // Первичное выражение: IDENT | Const | IDENT[Const] | (Expr)
+    DATA_TYPE Expr(); // Выражение (уровень равенств; поддержка унарного +/-)
+    DATA_TYPE Rel(); // Уровень отношений (<, <=, >, >=)
+    DATA_TYPE Add(); // Аддитивные (+, -)
+    DATA_TYPE Mul(); // Мультипликативные (*, /, %)
+    DATA_TYPE Prim(); // Первичное выражение: IDENT | Const | IDENT[Const] | (Expr)
 
 public:
     Diagram(Scanner* scanner);

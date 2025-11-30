@@ -126,11 +126,15 @@
     <ClCompile Include="diagram.cpp" />
     <ClCompile Include="lab4.cpp" />
     <ClCompile Include="scanner.cpp" />
+    <ClCompile Include="tree.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="data_type.h" />
     <ClInclude Include="defines.h" />
     <ClInclude Include="diagram.h" />
     <ClInclude Include="scanner.h" />
+    <ClInclude Include="sem_node.h" />
+    <ClInclude Include="tree.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />

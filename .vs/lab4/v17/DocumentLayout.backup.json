@@ -5,6 +5,10 @@
     {
       "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\\u0423\u043D\u0438\u0432\u0435\u0440\\\u0422\u0410\u042F\u0438\u0422\\\u041B\u0430\u0431.4\\tayat\\input.txt||{8B382828-6202-11D1-8870-0000F87579D2}",
       "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:input.txt||{8B382828-6202-11D1-8870-0000F87579D2}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3E9BDEAD-DBEC-416C-A357-62EA735C8ACA}|lab4.vcxproj|D:\\\u0423\u043D\u0438\u0432\u0435\u0440\\\u0422\u0410\u042F\u0438\u0422\\\u041B\u0430\u0431.4\\tayat\\diagram.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{3E9BDEAD-DBEC-416C-A357-62EA735C8ACA}|lab4.vcxproj|solutionrelative:diagram.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     }
   ],
   "DocumentGroupContainers": [
@@ -14,8 +18,21 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 1,
           "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "diagram.cpp",
+              "DocumentMoniker": "D:\\\u0423\u043D\u0438\u0432\u0435\u0440\\\u0422\u0410\u042F\u0438\u0422\\\u041B\u0430\u0431.4\\tayat\\diagram.cpp",
+              "RelativeDocumentMoniker": "diagram.cpp",
+              "ToolTip": "D:\\\u0423\u043D\u0438\u0432\u0435\u0440\\\u0422\u0410\u042F\u0438\u0422\\\u041B\u0430\u0431.4\\tayat\\diagram.cpp",
+              "RelativeToolTip": "diagram.cpp",
+              "ViewState": "AgIAAOgBAAAAAAAAAAAAABkAAAARAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2025-11-30T14:43:08.558Z",
+              "EditorCaption": ""
+            },
             {
               "$type": "Document",
               "DocumentIndex": 0,
@@ -24,9 +41,9 @@
               "RelativeDocumentMoniker": "input.txt",
               "ToolTip": "D:\\\u0423\u043D\u0438\u0432\u0435\u0440\\\u0422\u0410\u042F\u0438\u0422\\\u041B\u0430\u0431.4\\tayat\\input.txt",
               "RelativeToolTip": "input.txt",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAMAAAAKAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003109|",
-              "WhenOpened": "2025-11-19T04:46:46.261Z",
+              "WhenOpened": "2025-11-30T12:09:35.685Z",
               "EditorCaption": ""
             }
           ]
