@@ -3,8 +3,10 @@
 #include "scanner.h"
 #include "defines.h"
 #include "data_type.h"
+#include "tree.h"
 #include <string>
 #include <vector>
+#include <stack>
 
 class Diagram {
 private:
@@ -21,6 +23,9 @@ private:
     DATA_TYPE current_decl_type; // Текущий тип при объявлении переменных, массивов и именованных констант
     int current_arr_elem_count; // Текущая размерность массива (для определения: массив или нет)
 
+    // Стек для вычисления выражений
+    std::stack<SemNode> eval_stack;
+
     int nextToken();
     int peekToken();
     void pushBack(int tok, const std::string& lex);
@@ -29,6 +34,7 @@ private:
     void lexError();
     void synError(const std::string& msg);
     void semError(const std::string& msg);
+    void interpError(const std::string& msg);
 
     void Program(); // Верхнеуровневая программа (TopDecl*)
     void TopDecl(); // Одно верхнеуровневое объявление (MainFunc | TypeDefinition | VarDecl | ConstDecl)
@@ -48,9 +54,15 @@ private:
     DATA_TYPE Mul(); // Мультипликативные (*, /, %)
     DATA_TYPE Prim(); // Первичное выражение: IDENT | Const | IDENT[Const] | (Expr)
 
+    // Вспомогательные методы интерпретации
+    void pushValue(const SemNode& node);
+    SemNode popValue();
+    SemNode evaluateConstant(const std::string& value, DATA_TYPE type);
+    void executeAssignment(const std::string& varName, DATA_TYPE exprType, int line, int col);
+
 public:
     Diagram(Scanner* scanner);
 
     // Точка входа: разбор всей программы
-    void ParseProgram();
+    void ParseProgram(bool isInterp = true, bool isDebug = false);
 };

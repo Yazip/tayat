@@ -1,6 +1,2 @@
-﻿  diagram.cpp
-D:\Универ\ТАЯиТ\Лаб.4\tayat\diagram.cpp(313,41): warning C4101: e: неиспользованная локальная переменная
-D:\Универ\ТАЯиТ\Лаб.4\tayat\diagram.cpp(531,45): warning C4101: e: неиспользованная локальная переменная
-D:\Универ\ТАЯиТ\Лаб.4\tayat\diagram.cpp(741,49): warning C4101: e: неиспользованная локальная переменная
-D:\Универ\ТАЯиТ\Лаб.4\tayat\diagram.cpp(768,1): warning C4715: Diagram::Prim: значение возвращается не при всех путях выполнения
+﻿  lab4.cpp
   lab4.vcxproj -> D:\Универ\ТАЯиТ\Лаб.4\tayat\x64\Debug\lab4.exe

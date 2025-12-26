@@ -28,6 +28,11 @@ void Diagram::semError(const std::string& msg) {
     Tree::SemError(msg, cur_lex, lc.first, lc.second);
 }
 
+void Diagram::interpError(const std::string& msg) {
+    auto lc = sc->getLineCol();
+    Tree::InterpError(msg, cur_lex, lc.first, lc.second);
+}
+
 int Diagram::nextToken() {
     if (!push_tok.empty()) {
         int t = push_tok.back();
@@ -63,8 +68,78 @@ void Diagram::pushBack(int tok, const std::string& lex) {
     push_lex.push_back(lex);
 }
 
+// Вспомогательные методы для интерпретации
+void Diagram::pushValue(const SemNode& node) {
+    eval_stack.push(node);
+}
+
+SemNode Diagram::popValue() {
+    if (eval_stack.empty()) {
+        semError("Внутренняя ошибка: стек вычислений пуст");
+    }
+    SemNode node = eval_stack.top();
+    eval_stack.pop();
+    return node;
+}
+
+SemNode Diagram::evaluateConstant(const std::string& value, DATA_TYPE type) {
+    SemNode result;
+    result.DataType = type;
+    result.hasValue = true;
+
+    try {
+        // Обрабатываем отрицательные числа напрямую
+        std::string value_to_parse = value;
+        bool isNegative = false;
+
+        if (!value_to_parse.empty() && value_to_parse[0] == '-') {
+            isNegative = true;
+            value_to_parse = value_to_parse.substr(1);
+        }
+
+        long long val = std::stoll(value_to_parse, nullptr, 0);
+
+        if (isNegative) {
+            val = -val;
+        }
+
+        if (type == TYPE_SHORT_INT) {
+            result.Value.v_int16 = static_cast<int16_t>(val);
+        }
+        else if (type == TYPE_INT) {
+            result.Value.v_int32 = static_cast<int32_t>(val);
+        }
+        else if (type == TYPE_LONG_INT) {
+            result.Value.v_int32 = static_cast<int32_t>(val);
+        }
+        else if (type == TYPE_LONG_LONG_INT) {
+            result.Value.v_int64 = static_cast<int64_t>(val);
+        }
+    }
+    catch (const std::exception& e) {
+        semError("Неверный формат константы: " + std::string(e.what()));
+    }
+
+    return result;
+}
+
+void Diagram::executeAssignment(const std::string& varName, DATA_TYPE exprType, int line, int col) {
+    SemNode value = popValue();
+    Tree* varNode = Tree::Cur->SemGetVar(varName, line, col);
+    DATA_TYPE varType = varNode->n->DataType;
+
+    bool varIsInt = (varType == TYPE_INT || varType == TYPE_SHORT_INT || varType == TYPE_LONG_INT || varType == TYPE_LONG_LONG_INT);
+    bool exprIsInt = (exprType == TYPE_INT || exprType == TYPE_SHORT_INT || exprType == TYPE_LONG_INT || exprType == TYPE_LONG_LONG_INT);
+
+    if (!(varIsInt && exprIsInt)) {
+        semError("Несоответствие типов при присваивании для '" + varName + "'");
+    }
+
+    Tree::SetVarValue(varName, value, line, col);
+}
+
 // Точка входа
-void Diagram::ParseProgram() {
+void Diagram::ParseProgram(bool isInterp, bool isDebug) {
     // Создаём корень семантического дерева (область верхнего уровня)
     SemNode* root_node = new SemNode();
     root_node->id = "<глобальная область видимости>";
@@ -74,12 +149,30 @@ void Diagram::ParseProgram() {
     Tree* root_tree = new Tree(root_node, nullptr);
     Tree::SetCur(root_tree);
 
+    if (isInterp) {
+        Tree::EnableInterpretation();
+    }
+    else {
+        Tree::DisableInterpretation();
+    }
+
+    if (isDebug) {
+        Tree::EnableDebug();
+    }
+    else {
+        Tree::DisableDebug();
+    }
+
     Program();
 
     // Проверим, что в конце файла действительно конец
     int t = peekToken();
     if (t != T_END) {
         synError("Лишний текст в конце программы");
+    }
+
+    if (!isInterp) {
+        root_tree->Print();
     }
 }
 
@@ -89,10 +182,6 @@ void Diagram::Program() {
     while (t == KW_INT || t == KW_SHORT || t == KW_LONG || t == KW_LONGLONG || t == IDENT || t == KW_TYPEDEF || t == KW_CONST) {
         TopDecl();
         t = peekToken();
-    }
-
-    if (t != T_END) {
-        synError("Ожидалось объявление переменной, именованной константы, метки типа или определение функции main");
     }
 }
 
@@ -178,8 +267,10 @@ void Diagram::MainFunc() {
     // Тело main
     Block();
 
+
     // Восстанавливаем предыдущую область
     Tree::SetCur(saved_cur);
+    Tree::SetCurrentArea(saved_cur);
 }
 
 // VarDecl -> Type IdInitList ;
@@ -368,6 +459,11 @@ void Diagram::IdInit(bool const_flag) {
         node = Tree::Cur->SemInclude(name, TYPE_ARRAY, lc.first, lc.second);
         node->SemSetBasicType(node, current_decl_type);
         node->SemSetArrElemCount(node, current_arr_elem_count);
+
+        for (int i = 0; i < current_arr_elem_count; i++) {
+            Tree::Cur->SemInclude((name + "_" + std::to_string(i)), current_decl_type, lc.first, lc.second);
+            node->SemSetIndex(node, i);
+        }
     }
     else {
         node = Tree::Cur->SemInclude(name, current_decl_type, lc.first, lc.second);
@@ -385,12 +481,16 @@ void Diagram::IdInit(bool const_flag) {
         nextToken();
         DATA_TYPE expr_type = Expr();
 
+        SemNode value = popValue();
+
         bool node_is_int = (node->n->DataType == TYPE_INT || node->n->DataType == TYPE_SHORT_INT || node->n->DataType == TYPE_LONG_INT || node->n->DataType == TYPE_LONG_LONG_INT);
         bool expr_is_int = (expr_type == TYPE_INT || expr_type == TYPE_SHORT_INT || expr_type == TYPE_LONG_INT || expr_type == TYPE_LONG_LONG_INT);
 
         if (!(node_is_int && expr_is_int)) {
             semError("Несоответствие типов при инициализации переменной / именованной константы '" + name + "'");
         }
+
+        Tree::SetVarValue(node->n->id, value, sc->getLineCol().first, sc->getLineCol().second);
     }
     else {
         if (const_flag) {
@@ -408,6 +508,7 @@ void Diagram::Block() {
 
     auto lc = sc->getLineCol();
     Tree::Cur->SemEnterBlock(lc.first, lc.second);
+    Tree::SetCurrentArea(Tree::Cur);
 
     t = nextToken();
     BlockItems();
@@ -417,6 +518,7 @@ void Diagram::Block() {
     }
 
     Tree::Cur->SemExitBlock();
+    Tree::SetCurrentArea(Tree::Cur);
     nextToken();
 }
 
@@ -540,6 +642,9 @@ void Diagram::Stmt() {
             if (t != RBRACKET) {
                 synError("Ожидалась ']' после константы");
             }
+
+            name = (name + "_" + std::to_string(index));
+
             nextToken();
             t = peekToken();
         }
@@ -566,6 +671,9 @@ void Diagram::Stmt() {
             if (!(node_is_int && expr_is_int)) {
                 semError("Несоответствие типов в операторе присваивания");
             }
+
+            // Выполняем присваивание
+            executeAssignment(name, expr_type, sc->getLineCol().first, sc->getLineCol().second);
 
             t = peekToken();
             if (t != SEMI) {
@@ -607,23 +715,83 @@ void Diagram::WhileStmt() {
 // Expr -> ['+'|'-'] Rel ( ('==' | '!=') Rel )*
 DATA_TYPE Diagram::Expr() {
     int t = peekToken();
+
+    bool has_unary = false;
+    std::string unary_op = "";
+
+    // Пропускаем унарные операции для констант - они обрабатываются в Prim()
+    // Оставляем только для случаев, когда это не константа
     if (t == PLUS || t == MINUS) {
-        nextToken();
+        // Смотрим вперед, чтобы определить, константа ли это
+        int saved_tok = nextToken();
+        std::string saved_lex = cur_lex;
+        int nextTok = peekToken();
+
+        // Если следующий токен - константа, то унарную операцию обработает Prim()
+        if (nextTok == CONST_DEC || nextTok == CONST_HEX) {
+            pushBack(saved_tok, saved_lex);
+        }
+        else {
+            // Если не константа, то обрабатываем как унарную операцию
+            has_unary = true;
+            unary_op = (saved_tok == PLUS) ? "+" : "-";
+        }
     }
     DATA_TYPE left = Rel();
+
+    // Обработка унарной операции (только для не-констант)
+    if (has_unary) {
+        if (!(left == TYPE_INT || left == TYPE_SHORT_INT || left == TYPE_LONG_INT || left == TYPE_LONG_LONG_INT)) {
+            semError("Унарный '+'/'-' применим только к целым типам");
+        }
+
+        SemNode operand = popValue();
+        SemNode result;
+
+        if (unary_op == "-") {
+            SemNode minusOne;
+            minusOne.DataType = left;
+            minusOne.hasValue = true;
+
+            switch (left) {
+            case TYPE_SHORT_INT: minusOne.Value.v_int16 = -1; break;
+            case TYPE_INT: minusOne.Value.v_int32 = -1; break;
+            case TYPE_LONG_INT: minusOne.Value.v_int32 = -1; break;
+            case TYPE_LONG_LONG_INT: minusOne.Value.v_int64 = -1; break;
+            default: break;
+            }
+
+            result = Tree::ExecuteArithmeticOp(operand, minusOne, "*", sc->getLineCol().first, sc->getLineCol().second);
+        }
+        else {
+            result = operand;
+        }
+
+        pushValue(result);
+        left = result.DataType;
+    }
+
     t = peekToken();
     while (t == EQ || t == NEQ) {
+        std::string op = (t == EQ) ? "==" : "!=";
         nextToken();
 
         DATA_TYPE right = Rel();
 
+        SemNode right_val = popValue();
+        SemNode left_val = popValue();
+
         bool is_left_int = (left == TYPE_INT || left == TYPE_SHORT_INT || left == TYPE_LONG_INT || left == TYPE_LONG_LONG_INT);
         bool is_right_int = (right == TYPE_INT || right == TYPE_SHORT_INT || right == TYPE_LONG_INT || right == TYPE_LONG_LONG_INT);
 
-        if (!(is_left_int && is_right_int)) {
+        if (is_left_int && is_right_int) {
+            SemNode result = Tree::ExecuteComparisonOp(left_val, right_val, op, sc->getLineCol().first, sc->getLineCol().second);
+            pushValue(result);
+            left = TYPE_INT;
+        }
+        else {
             semError("Операнды для '=='/ '!=' должны быть одного типа (int)");
         }
-        left = TYPE_INT;
 
         t = peekToken();
     }
@@ -635,9 +803,20 @@ DATA_TYPE Diagram::Rel() {
     DATA_TYPE left = Add();
     int t = peekToken();
     while (t == LT || t == LE || t == GT || t == GE) {
+        std::string op;
+        switch (t) {
+        case LT: op = "<"; break;
+        case LE: op = "<="; break;
+        case GT: op = ">"; break;
+        case GE: op = ">="; break;
+        }
+        
         nextToken();
 
         DATA_TYPE right = Add();
+
+        SemNode right_val = popValue();
+        SemNode left_val = popValue();
 
         bool is_left_int = (left == TYPE_INT || left == TYPE_SHORT_INT || left == TYPE_LONG_INT || left == TYPE_LONG_LONG_INT);
         bool is_right_int = (right == TYPE_INT || right == TYPE_SHORT_INT || right == TYPE_LONG_INT || right == TYPE_LONG_LONG_INT);
@@ -645,6 +824,9 @@ DATA_TYPE Diagram::Rel() {
         if (!(is_left_int && is_right_int)) {
             semError("Операнды для '<, <=, >, >=' должны быть целыми (int / short / long / longlong)");
         }
+
+        SemNode result = Tree::ExecuteComparisonOp(left_val, right_val, op, sc->getLineCol().first, sc->getLineCol().second);
+        pushValue(result);
         left = TYPE_INT;
 
         t = peekToken();
@@ -657,9 +839,14 @@ DATA_TYPE Diagram::Add() {
     DATA_TYPE left = Mul();
     int t = peekToken();
     while (t == PLUS || t == MINUS) {
+        std::string op = (t == PLUS) ? "+" : "-";
+
         nextToken();
 
         DATA_TYPE right = Mul();
+
+        SemNode right_val = popValue();
+        SemNode left_val = popValue();
 
         bool is_left_int = (left == TYPE_INT || left == TYPE_SHORT_INT || left == TYPE_LONG_INT || left == TYPE_LONG_LONG_INT);
         bool is_right_int = (right == TYPE_INT || right == TYPE_SHORT_INT || right == TYPE_LONG_INT || right == TYPE_LONG_LONG_INT);
@@ -667,7 +854,10 @@ DATA_TYPE Diagram::Add() {
         if (!(is_left_int && is_right_int)) {
             semError("Операнды для '+'/'-' должны быть целыми (int / short / long / longlong)");
         }
-        left = TYPE_INT;
+
+        SemNode result = Tree::ExecuteArithmeticOp(left_val, right_val, op, sc->getLineCol().first, sc->getLineCol().second);
+        pushValue(result);
+        left = result.DataType;
 
         t = peekToken();
     }
@@ -679,9 +869,19 @@ DATA_TYPE Diagram::Mul() {
     DATA_TYPE left = Prim();
     int t = peekToken();
     while (t == MULT || t == DIV || t == MOD) {
+        std::string op;
+        switch (t) {
+        case MULT: op = "*"; break;
+        case DIV: op = "/"; break;
+        case MOD: op = "%"; break;
+        }
+
         nextToken();
 
         DATA_TYPE right = Prim();
+
+        SemNode right_val = popValue();
+        SemNode left_val = popValue();
 
         bool is_left_int = (left == TYPE_INT || left == TYPE_SHORT_INT || left == TYPE_LONG_INT || left == TYPE_LONG_LONG_INT);
         bool is_right_int = (right == TYPE_INT || right == TYPE_SHORT_INT || right == TYPE_LONG_INT || right == TYPE_LONG_LONG_INT);
@@ -689,7 +889,10 @@ DATA_TYPE Diagram::Mul() {
         if (!(is_left_int && is_right_int)) {
             semError("Операнды для '*', '/', '%' должны быть целыми (int / short / long / longlong)");
         }
-        left = TYPE_INT;
+
+        SemNode result = Tree::ExecuteArithmeticOp(left_val, right_val, op, sc->getLineCol().first, sc->getLineCol().second);
+        pushValue(result);
+        left = result.DataType;
 
         t = peekToken();
     }
@@ -699,9 +902,85 @@ DATA_TYPE Diagram::Mul() {
 // Prim -> IDENT | Const | IDENT '[' Const ']' | '(' Expr ')'
 DATA_TYPE Diagram::Prim() {
     int t = peekToken();
+
+    // Сначала проверяем унарный минус для отрицательных констант
+    if (t == MINUS) {
+        nextToken();
+        t = peekToken();
+        if (t == CONST_DEC || t == CONST_HEX) {
+            nextToken();
+            
+            DATA_TYPE const_type = TYPE_SHORT_INT;
+
+            // Определяем, нужно ли автоматически повышать тип до long
+            std::string value_str = "-" + cur_lex;
+            try {
+                long long val = std::stoll(value_str, nullptr, 0);
+
+                // Если значение выходит за пределы short, автоматически делаем его int
+                if (val > 32767 || val < -32768) {
+                    const_type = TYPE_INT;
+                }
+
+                // Если значение выходит за пределы int, автоматически делаем его longlong
+                if (val > 2147483647LL || val < -2147483648LL) {
+                    const_type = TYPE_LONG_LONG_INT;
+                }
+            }
+            catch (...) {
+                // Оставляем как TYPE_INT в случае ошибки
+            }
+
+            SemNode const_node = evaluateConstant("-" + cur_lex, const_type);
+            pushValue(const_node);
+            return const_type;
+        }
+        else {
+            // Если после минуса не константа, то это унарная операция над выражением
+            // Помещаем токен обратно и обрабатываем как обычное выражение в скобках
+            pushBack(MINUS, "-");
+            // Обрабатываем как выражение в скобках
+            nextToken();
+            t = peekToken();
+            if (t != LPAREN) {
+                synError("Ожидалась константа или выражение в скобках после '-'");
+            }
+            nextToken();
+            DATA_TYPE dt = Expr();
+            t = peekToken();
+            if (t != RPAREN) synError("Ожидался ')' после выражения");
+            nextToken();
+            return dt;
+        }
+    }
+
     if (t == CONST_DEC || t == CONST_HEX) {
         nextToken();
-        return TYPE_INT;
+        
+        DATA_TYPE const_type = TYPE_SHORT_INT;
+
+        // Определяем, нужно ли автоматически повышать тип до long
+        std::string value_str = cur_lex;
+        try {
+            long long val = std::stoll(value_str, nullptr, 0);
+
+            // Если значение выходит за пределы short, автоматически делаем его int
+            if (val > 32767 || val < -32768) {
+                const_type = TYPE_INT;
+            }
+
+            // Если значение выходит за пределы int, автоматически делаем его longlong
+            if (val > 2147483647LL || val < -2147483648LL) {
+                const_type = TYPE_LONG_LONG_INT;
+            }
+        }
+        catch (...) {
+            // Оставляем как TYPE_INT в случае ошибки
+        }
+
+        SemNode const_node = evaluateConstant(cur_lex, const_type);
+        pushValue(const_node);
+        return const_type;
     }
     if (t == LPAREN) {
         nextToken();
@@ -751,7 +1030,21 @@ DATA_TYPE Diagram::Prim() {
                     synError("Ожидалась ']' после константы");
                 }
                 nextToken();
-                return node->n->BasicType;
+
+                name = (name + "_" + std::to_string(index));
+                node = Tree::Cur->SemGetVar(name, sc->getLineCol().first, sc->getLineCol().second);
+
+                if (!node->n->hasValue) {
+                    interpError("Использование неинициализированного элемента массива '" + name + "'");
+                }
+
+                SemNode value;
+                value.DataType = node->n->DataType;
+                value.hasValue = true;
+                value.Value = node->n->Value;
+                pushValue(value);
+
+                return node->n->DataType;
             }
             else {
                 synError("Ожидалась константа после '['");
@@ -761,8 +1054,20 @@ DATA_TYPE Diagram::Prim() {
             if (node->n->DataType == TYPE_ARRAY) {
                 semError("Нельзя использовать массив целиком в качестве операнда");
             }
+
+            if (!node->n->hasValue) {
+                interpError("Использование неинициализированной переменной/именованной константы '" + name + "'");
+            }
+
+            SemNode value;
+            value.DataType = node->n->DataType;
+            value.hasValue = true;
+            value.Value = node->n->Value;
+            pushValue(value);
+
             return node->n->DataType;
         }
     }
     synError("Ожидалось первичное выражение (IDENT, константа или скобки)");
+    return TYPE_INT;
 }

@@ -1,6 +1,10 @@
 #pragma once
 #include "sem_node.h"
 #include <fstream>
+#include <vector>
+#include <iostream>
+#include <sstream>
+#include <iomanip>
 
 class Tree {
 public:
@@ -29,6 +33,9 @@ public:
     // Занесение идентификатора a в текущую область
     Tree* SemInclude(const std::string& a, DATA_TYPE t, int line, int col);
 
+    // Занесение константы со значением
+    Tree* SemIncludeConstant(const std::string& a, DATA_TYPE t, const std::string& value, int line, int col);
+
     // Установить флаг именованной константы
     void SemSetConst(Tree* Addr, int value);
 
@@ -37,6 +44,9 @@ public:
 
     // Установить размерность массива
     void SemSetArrElemCount(Tree* Addr, int aec);
+
+    // Установить индекс элемента массива
+    void SemSetIndex(Tree* Addr, int index);
 
     // Найти переменную / именованную константу (не метку типа) с именем a в видимых областях
     Tree* SemGetVar(const std::string& a, int line, int col);
@@ -61,8 +71,56 @@ public:
     // Печать ошибки и остановка
     static void SemError(const std::string& msg, const std::string& id = "", int line = -1, int col = -1);
 
+    static void InterpError(const std::string& msg, const std::string& id = "", int line = -1, int col = -1);
+
+    // Установка значения переменной
+    static void SetVarValue(const std::string& name, const SemNode& value, int line, int col);
+
+    // Получение значения переменной
+    static SemNode GetVarValue(const std::string& name, int line, int col);
+
+    // Выполнение арифметических операций
+    static SemNode ExecuteArithmeticOp(const SemNode& left, const SemNode& right, const std::string& op, int line, int col);
+
+    // Выполнение операций сравнения
+    static SemNode ExecuteComparisonOp(const SemNode& left, const SemNode& right, const std::string& op, int line, int col);
+
+    // Приведение типов для операций
+    static DATA_TYPE GetMaxType(DATA_TYPE t1, DATA_TYPE t2);
+
+    static SemNode CastToType(const SemNode& value, DATA_TYPE targetType, int line, int col, bool showWarning = false);
+
+    // Проверка возможности приведения
+    static bool CanImplicitCast(DATA_TYPE from, DATA_TYPE to);
+
+    // Методы для управления интерпретацией
+    static void EnableInterpretation();
+    static void DisableInterpretation();
+    static bool IsInterpretationEnabled();
+
+    static void EnableDebug();
+    static void DisableDebug();
+    static bool IsDebugEnabled();
+
+    // Методы для вывода
+    static void PrintDebugInfo(const std::string& message, int line = 0, int col = 0);
+    static void PrintAssignment(const std::string& varName, const SemNode& value, int line, int col);
+    static void PrintArithmeticOp(const std::string& op, const SemNode& left, const SemNode& right, const SemNode& result, int line, int col);
+    static void PrintTypeConversionWarning(DATA_TYPE from, DATA_TYPE to, const std::string& context, const std::string& expression, int line, int col);
+
+    // Текущая область для контекста
+    static Tree* currentArea;
+
+    // Методы для управления текущей областью
+    static void SetCurrentArea(Tree* area) { currentArea = area; }
+    static Tree* GetCurrentArea() { return currentArea; }
+
 private:
     // Печать дерева
     void Print(int depth);
     std::string makeLabel(const Tree* tree) const;
+
+    // Флаг интерпретации
+    static bool interpretationEnabled;
+    static bool debug; // Флаг для подробного вывода
 };

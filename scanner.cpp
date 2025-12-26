@@ -302,10 +302,10 @@ int Scanner::getNextLex(std::string& out_lex) {
         }
     }
 
-    // Вывод информации в консоль
-    if (token != T_END) {
-        std::cout << "Код: " << token << ", Лексема: '" << out_lex << "'" << std::endl;
-    }
+    //// Вывод информации в консоль
+    //if (token != T_END) {
+    //    std::cout << "Код: " << token << ", Лексема: '" << out_lex << "'" << std::endl;
+    //}
 
     return token;
 }
