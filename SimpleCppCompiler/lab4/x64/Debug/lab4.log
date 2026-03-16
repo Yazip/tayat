@@ -1,0 +1,9 @@
+﻿  diagram.cpp
+D:\Универ\ТАЯиТ\Лаб.4\tayat\SimpleCppCompiler\diagram.cpp(404,41): warning C4101: e: неиспользованная локальная переменная
+D:\Универ\ТАЯиТ\Лаб.4\tayat\SimpleCppCompiler\diagram.cpp(633,45): warning C4101: e: неиспользованная локальная переменная
+D:\Универ\ТАЯиТ\Лаб.4\tayat\SimpleCppCompiler\diagram.cpp(1020,49): warning C4101: e: неиспользованная локальная переменная
+  lab4.cpp
+  scanner.cpp
+  tree.cpp
+  Создание кода...
+  lab4.vcxproj -> D:\Универ\ТАЯиТ\Лаб.4\tayat\SimpleCppCompiler\x64\Debug\lab4.exe

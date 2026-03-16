@@ -1,0 +1,121 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "D:\\\u0423\u043D\u0438\u0432\u0435\u0440\\\u0422\u0410\u042F\u0438\u0422\\\u041B\u0430\u0431.4\\tayat\\SimpleCppCompiler\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{DF46015A-867E-D5B8-D2E9-8CEBADF84AD3}|..\\UnitTests\\UnitTests.vcxproj|D:\\\u0423\u043D\u0438\u0432\u0435\u0440\\\u0422\u0410\u042F\u0438\u0422\\\u041B\u0430\u0431.4\\tayat\\UnitTests\\UnitTests.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3E9BDEAD-DBEC-416C-A357-62EA735C8ACA}|lab4.vcxproj|D:\\\u0423\u043D\u0438\u0432\u0435\u0440\\\u0422\u0410\u042F\u0438\u0422\\\u041B\u0430\u0431.4\\tayat\\SimpleCppCompiler\\tree.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{3E9BDEAD-DBEC-416C-A357-62EA735C8ACA}|lab4.vcxproj|solutionrelative:tree.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3E9BDEAD-DBEC-416C-A357-62EA735C8ACA}|lab4.vcxproj|D:\\\u0423\u043D\u0438\u0432\u0435\u0440\\\u0422\u0410\u042F\u0438\u0422\\\u041B\u0430\u0431.4\\tayat\\SimpleCppCompiler\\tree.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{3E9BDEAD-DBEC-416C-A357-62EA735C8ACA}|lab4.vcxproj|solutionrelative:tree.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3E9BDEAD-DBEC-416C-A357-62EA735C8ACA}|lab4.vcxproj|D:\\\u0423\u043D\u0438\u0432\u0435\u0440\\\u0422\u0410\u042F\u0438\u0422\\\u041B\u0430\u0431.4\\tayat\\SimpleCppCompiler\\scanner.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{3E9BDEAD-DBEC-416C-A357-62EA735C8ACA}|lab4.vcxproj|solutionrelative:scanner.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3E9BDEAD-DBEC-416C-A357-62EA735C8ACA}|lab4.vcxproj|D:\\\u0423\u043D\u0438\u0432\u0435\u0440\\\u0422\u0410\u042F\u0438\u0422\\\u041B\u0430\u0431.4\\tayat\\SimpleCppCompiler\\scanner.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{3E9BDEAD-DBEC-416C-A357-62EA735C8ACA}|lab4.vcxproj|solutionrelative:scanner.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3E9BDEAD-DBEC-416C-A357-62EA735C8ACA}|lab4.vcxproj|D:\\\u0423\u043D\u0438\u0432\u0435\u0440\\\u0422\u0410\u042F\u0438\u0422\\\u041B\u0430\u0431.4\\tayat\\SimpleCppCompiler\\diagram.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{3E9BDEAD-DBEC-416C-A357-62EA735C8ACA}|lab4.vcxproj|solutionrelative:diagram.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 5,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "diagram.cpp",
+              "DocumentMoniker": "D:\\\u0423\u043D\u0438\u0432\u0435\u0440\\\u0422\u0410\u042F\u0438\u0422\\\u041B\u0430\u0431.4\\tayat\\SimpleCppCompiler\\diagram.cpp",
+              "RelativeDocumentMoniker": "diagram.cpp",
+              "ToolTip": "D:\\\u0423\u043D\u0438\u0432\u0435\u0440\\\u0422\u0410\u042F\u0438\u0422\\\u041B\u0430\u0431.4\\tayat\\SimpleCppCompiler\\diagram.cpp",
+              "RelativeToolTip": "diagram.cpp",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABYAAAAzAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2026-03-16T12:47:44.789Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "scanner.cpp",
+              "DocumentMoniker": "D:\\\u0423\u043D\u0438\u0432\u0435\u0440\\\u0422\u0410\u042F\u0438\u0422\\\u041B\u0430\u0431.4\\tayat\\SimpleCppCompiler\\scanner.cpp",
+              "RelativeDocumentMoniker": "scanner.cpp",
+              "ToolTip": "D:\\\u0423\u043D\u0438\u0432\u0435\u0440\\\u0422\u0410\u042F\u0438\u0422\\\u041B\u0430\u0431.4\\tayat\\SimpleCppCompiler\\scanner.cpp",
+              "RelativeToolTip": "scanner.cpp",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABkAAAAUAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2026-03-16T12:44:50.778Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "scanner.h",
+              "DocumentMoniker": "D:\\\u0423\u043D\u0438\u0432\u0435\u0440\\\u0422\u0410\u042F\u0438\u0422\\\u041B\u0430\u0431.4\\tayat\\SimpleCppCompiler\\scanner.h",
+              "RelativeDocumentMoniker": "scanner.h",
+              "ToolTip": "D:\\\u0423\u043D\u0438\u0432\u0435\u0440\\\u0422\u0410\u042F\u0438\u0422\\\u041B\u0430\u0431.4\\tayat\\SimpleCppCompiler\\scanner.h",
+              "RelativeToolTip": "scanner.h",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABkAAAAzAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2026-03-16T12:41:50.794Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "tree.cpp",
+              "DocumentMoniker": "D:\\\u0423\u043D\u0438\u0432\u0435\u0440\\\u0422\u0410\u042F\u0438\u0422\\\u041B\u0430\u0431.4\\tayat\\SimpleCppCompiler\\tree.cpp",
+              "RelativeDocumentMoniker": "tree.cpp",
+              "ToolTip": "D:\\\u0423\u043D\u0438\u0432\u0435\u0440\\\u0422\u0410\u042F\u0438\u0422\\\u041B\u0430\u0431.4\\tayat\\SimpleCppCompiler\\tree.cpp",
+              "RelativeToolTip": "tree.cpp",
+              "ViewState": "AgIAAKUBAAAAAAAAAADgv7YBAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2026-03-16T10:31:45.743Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "tree.h",
+              "DocumentMoniker": "D:\\\u0423\u043D\u0438\u0432\u0435\u0440\\\u0422\u0410\u042F\u0438\u0422\\\u041B\u0430\u0431.4\\tayat\\SimpleCppCompiler\\tree.h",
+              "RelativeDocumentMoniker": "tree.h",
+              "ToolTip": "D:\\\u0423\u043D\u0438\u0432\u0435\u0440\\\u0422\u0410\u042F\u0438\u0422\\\u041B\u0430\u0431.4\\tayat\\SimpleCppCompiler\\tree.h",
+              "RelativeToolTip": "tree.h",
+              "ViewState": "AgIAABYAAAAAAAAAAAAAAB8AAAAdAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2026-03-16T10:29:45.919Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "UnitTests.cpp",
+              "DocumentMoniker": "D:\\\u0423\u043D\u0438\u0432\u0435\u0440\\\u0422\u0410\u042F\u0438\u0422\\\u041B\u0430\u0431.4\\tayat\\UnitTests\\UnitTests.cpp",
+              "RelativeDocumentMoniker": "..\\UnitTests\\UnitTests.cpp",
+              "ToolTip": "D:\\\u0423\u043D\u0438\u0432\u0435\u0440\\\u0422\u0410\u042F\u0438\u0422\\\u041B\u0430\u0431.4\\tayat\\UnitTests\\UnitTests.cpp",
+              "RelativeToolTip": "..\\UnitTests\\UnitTests.cpp",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAALEAAABIAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2026-03-16T10:15:07.811Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
